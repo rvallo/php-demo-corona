@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: game
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpass
+
+  php:
+    depends_on:
+      - db
+    build: ./web/
+    ports:
+      - "80:80"
+    restart: always
+    environment:
+      DB_HOST: db:3306
+      DB_USER: user
+      DB_PASSWORD: userpass
+      DB_NAME: game
+    volumes:
+      - ./src/:/var/www/html/
+
+volumes:
+  db_data: {}
