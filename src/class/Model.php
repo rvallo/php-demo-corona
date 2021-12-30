@@ -2,6 +2,7 @@
 class Model
 {
     private $krok = 1;
+    private $msg = "";
     private $maxPocet = 5;
 
 	public function __construct(){
@@ -42,14 +43,17 @@ class Model
        $newhash = password_hash($password, PASSWORD_DEFAULT);
        
        if (password_verify($password, $adminPass[0]["password"])) {
-        echo "shito!";
-        $_SESSION['user'] = $login;
-        //header('Refresh: 2; URL = index.php');
+          $this->msg = "Přihlášení proběhlo úspěšně!";
+          $_SESSION['user'] = $login;
         } 
         else {
-          echo "neplatne heslo!";
+          $this->msg = "Neplatné heslo!";
         }
 
+    }
+
+    public function getMsg() {
+	    return $this->msg;
     }
 
     public function vratCisloStranky() {
@@ -106,7 +110,8 @@ class Model
                 'cisloStranky' => $this->krok,
                 'stranky' => $this->strankyOdkazovane(),
                 'template' => $template,
-                'score' => $this->getScore() 
+                'score' => $this->getScore(),
+                'msg' => $this->getMsg()
             );
         }
 

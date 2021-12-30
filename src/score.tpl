@@ -1,5 +1,5 @@
 <pre>
-<?php //var_dump($data->score);?>
+<?php //var_dump($data->msg);?>
 </pre>
 <!DOCTYPE html>
 <html lang="cs">
@@ -11,6 +11,10 @@
 </head>
 <body>
     <div id="box" align="center"></div>
+
+<?php if (isset($data->msg) && !empty($data->msg)) :?>
+    <div class="alert"><p><strong><?= $data->msg ?></strong></p></div>
+<?php endif;?>
       <h1>Score</h1>
 
 <?php if (!isset($_SESSION['user'])) :?>

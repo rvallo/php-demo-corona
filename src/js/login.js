@@ -17,4 +17,5 @@ $('#box,form').hide();
 
 $('a#logout').click(function(){
     $.post( "index.php", { logout: "true" } );
+    location.reload();
   })

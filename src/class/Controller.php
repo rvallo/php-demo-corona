@@ -13,6 +13,10 @@ class Controller
     }
 
     private function checkParams() {
+        if (isset($_POST['logout']) && $_POST['logout'] == 'true') {
+            session_unset();
+            session_destroy();
+        }
         if(isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['login']) && isset($_POST['login'])) {
             $this->model->loginAdmin($_POST['login'], $_POST['password']);
         }
