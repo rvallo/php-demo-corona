@@ -9,6 +9,25 @@ class Model
 
 	}
 
+    public function runSelectSQL($sqlcmd) {
+        require('config.php');
+        $result = NULL;
+        try {
+        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+        	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        	$sql = $conn->prepare($sqlcmd);
+        	$sql->execute();
+        	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
+
+            $result = $sql->FetchAll();
+        } catch (PDOException $e) {
+        	echo 'Chyba1: Nelze se připojit k dtb!' . $e->getMessage();
+            $result = 0;
+        }
+        $conn = NULL;
+        return $result;
+    }
+
     public function runSQL($sqlcmd) {
         require('config.php');
         $result = NULL;
@@ -21,8 +40,51 @@ class Model
 
             $result = $sql->FetchAll();
         } catch (PDOException $e) {
-        	echo 'Chyba: Nelze se připojit k dtb!' . $e->getMessage();
+        	echo 'Chyba3: Nelze se připojit k dtb!' . $e->getMessage();
             $result = 0;
+        }
+        $conn = NULL;
+        return $result;
+    }
+
+    public function selectPass($login) {
+        require('config.php');
+        $result = NULL;
+        try {
+        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+        	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        	$sql = $conn->prepare("SELECT password FROM admin WHERE username=:username;");
+            $sql->bindParam(':username', $login, PDO::PARAM_STR, 45 );
+        	$sql->execute();
+        	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $sql->FetchAll();
+            //$sql->close();
+        } catch (PDOException $e) {
+        	echo 'Chybasp: Nelze se připojit k dtb!' . $e->getMessage();
+            $conn = NULL;
+            return $result = 0;
+        }
+        $conn = NULL;
+        //return $result[0]["password"];
+        return (isset($result[0]["password"]) ? $result[0]["password"] : 0);
+    }
+
+    public function updatePass($login,$newhash) {
+        require('config.php');
+        $result = false;
+        try {
+            require('config.php');
+            $conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = $conn->prepare("UPDATE admin SET password=:newhash WHERE username=:user;");
+            $sql->bindParam(':newhash', $newhash, PDO::PARAM_STR, 255 );
+            $sql->bindParam(':user', $login, PDO::PARAM_STR, 45 );
+            $sql->execute();
+            $result = true;
+        } catch (PDOException $e) {
+        	echo 'Chybasp: Nelze se připojit k dtb!' . $e->getMessage();
+            $conn = NULL;
+            return $result;
         }
         $conn = NULL;
         return $result;
@@ -38,11 +100,18 @@ class Model
         }
     }
 
-    public function loginAdmin($login, $password) {
-       $adminPass = $this->runSQL("SELECT password FROM admin WHERE username='". $login . "'");
-       $newhash = password_hash($password, PASSWORD_DEFAULT);
-       
-       if (password_verify($password, $adminPass[0]["password"])) {
+    public function checkPass($login, $password) {
+        $sqlPass = $this->selectPass($login);
+        if (password_verify($password, $sqlPass)) {
+            return true;
+          } 
+        else {
+            return false;
+        }
+    }
+
+    public function loginAdmin($login, $password) {    
+       if ($this->checkPass($login, $password)) {
           $this->msg = "Přihlášení proběhlo úspěšně!";
           $_SESSION['user'] = $login;
         } 
@@ -61,6 +130,23 @@ class Model
         session_unset();
         session_destroy();
 	    $this->msg = "Odhlášení bylo úspěšné.";
+    }
+
+    public function changePass($oldpass, $newpass, $login) {
+      if ($this->checkPass($login, $oldpass)) {
+        $hash = password_hash($newpass, PASSWORD_DEFAULT);
+        if ($this->updatePass($login, $hash)) {
+            $this->msg = "Změna hesla proběhla úspěšně.";
+        }
+        else
+        {
+            $this->msg = "Nastala chyba při změne hesla, zkus to znovu.";
+        }
+        
+      } 
+      else {
+        $this->msg = "Neplatné heslo!";
+      }
     }
 
     public function getMsg() {

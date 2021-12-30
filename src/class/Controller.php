@@ -22,6 +22,9 @@ class Controller
         if(isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['login']) && isset($_POST['login'])) {
             $this->model->loginAdmin($_POST['login'], $_POST['password']);
         }
+        if(isset($_POST['oldpass']) && !empty($_POST['oldpass']) && !empty($_POST['newpass']) && isset($_POST['newpass']) && !empty($_SESSION['user']) ) {
+            $this->model->changePass($_POST['oldpass'],$_POST['newpass'],$_SESSION['user']);
+        }
         if(isset($_GET['vpred'])) {
             $this->model->jdiVpred((int)$_GET['vpred']);
         }
