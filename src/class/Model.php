@@ -36,19 +36,42 @@ class Model
 
     public function getScore() {
         $score = array();
-        for($i = 1; $i <= 5; $i++) {
-	        $score[] = (object) array(
-	            'rank' => '1',
-                'nick' => 'player',
-                'score' => 500
+        $scoreSql = $this->runSQL("SELECT nickname,score FROM score ORDER BY score DESC");
+        $rank = 1;
+	    foreach ($scoreSql as $row) {
+            $score[] = (object) array(
+	            'rank' => $rank,
+                'nick' => $row["nickname"],
+                'score' => $row["score"]
             );
-        }
+		  $rank++;
+	    }
+        //var_dump($scoreSql);
 	    return $score;
     }
 
+    public function runSQL($sqlcmd) {
+        require_once('config.php');
+        $result = NULL;
+        try {
+        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+        	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        	$sql = $conn->prepare($sqlcmd);
+        	$sql->execute();
+        	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
+
+            $result = $sql->FetchAll();
+        } catch (PDOException $e) {
+        	echo 'Chyba: Nelze se připojit k dtb!' . $e->getMessage();
+            $result = 0;
+        }
+        $conn = NULL;
+        return $result;
+    }
+
     public function getHighScore() {
-        $highscore = "5";
-	    return $highscore;
+        $test = $this->runSQL("SELECT score FROM score ORDER BY score DESC LIMIT 1");
+	    return (isset($test[0]["score"]) ? $test[0]["score"] : 0);
     }
 
 
