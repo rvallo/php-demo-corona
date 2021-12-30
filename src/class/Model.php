@@ -46,6 +46,11 @@ class Model
 	    return $score;
     }
 
+    public function getHighScore() {
+        $highscore = "5";
+	    return $highscore;
+    }
+
 
     public function dejDataProSablonu() {
         $template = 'uvod.tpl';
@@ -54,7 +59,8 @@ class Model
             return (object) array(
                 'cisloStranky' => $this->krok,
                 'stranky' => $this->strankyOdkazovane(),
-                'template' => $template
+                'template' => $template,
+                'highscore' => $this->getHighScore()
             );
         }
         if ($this->krok == 1) {
