@@ -52,6 +52,11 @@ class Model
 
     }
 
+    public function insertScore($score, $nickname) {
+        $insert = $this->runSQL("INSERT INTO `game`.`score` (nickname, score) VALUES ('". $nickname ."',". $score .");");
+        $this->msg = "Vlozeno do dtb.";
+     }
+
     public function getMsg() {
 	    return $this->msg;
     }

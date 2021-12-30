@@ -1,6 +1,6 @@
 var timerGameObj = (function(document){
-
-	var timerGame; 
+var internal_score = 0;
+var timerGame;
 
 function click()
 {
@@ -8,9 +8,9 @@ function click()
 
   if (btn.innerHTML == "Start game")
   {
-  	btn.innerHTML = "Stop pain!!!";
+    btn.innerHTML = "Stop pain!!!";
     setResult("result","Jdeme na to ;)","color_blue");
-    setValueElement("time", 60);
+    setValueElement("time", 5);
     start(timerGame);
   }
   else
@@ -30,14 +30,14 @@ function start()
 {
   timerGame = setInterval(drawCorona, 800);
   document.getElementById("score").value = "0";
-  console.log("spoustim");
+  //console.log("spoustim");
 }
 
 function reset()
 {
   clearTimeout(timerGame);
   removeChildDiv("game", "source");
-  console.log("reset");
+  //console.log("reset");
 }
 
 function setValueElement(id, value) {
@@ -48,12 +48,15 @@ function addValueElement(id, value) {
   scoreElement = document.getElementById(id);
   var score = parseInt(scoreElement.value);
   score += value;
-
+  if (id == "score") {
+    internal_score += value;
+   // console.log("score: " + value);
+  }
   scoreElement.value = score;
 }
 
 function imageOnClick(img) {
-  console.log(img.target.alt);
+  //console.log(img.target.alt);
 
   switch (parseInt(img.target.alt)) {
   case 0:
@@ -93,7 +96,7 @@ function removeChildDiv(myDiv, myChild) {
   imgCheck = document.getElementById(myChild);
 
   if (c.hasChildNodes() && imgCheck != null) {
-    console.log("mazu" + c.childNodes[0]);
+    //console.log("mazu" + c.childNodes[0]);
     c.removeChild(c.childNodes[0]);
   }
 }
@@ -130,16 +133,24 @@ function createImg(url, index, height) {
   return img;
 }
 
+function submitScore(score, nickname)
+{
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "./index.php", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  xhr.send("score=" + score + "&nickname=" + nickname);
+}
+
 function drawCorona()
 {
   addValueElement("time", -1);
-  console.log("kreslim");
+  //console.log("kreslim");
   var div = document.getElementById("game");
 
   removeChildDiv("game", "source");
 
   vir = parseInt(getRandomRange('0', '7'));
-  console.log(div.clientHeight);
+  //console.log(div.clientHeight);
 
   switch (vir) {
   case 0:
@@ -168,7 +179,11 @@ function drawCorona()
   if (checkValue("time","1"))
     {
       click();
-      setResult("result","Došel ti čas!", "color_red");
+      setResult("result","Čas vypršel! Tvé score bylo zapsáno do dějin.", "color_red");
+      nickenameElement = document.getElementById("nickname");
+      var nickname = nickenameElement.value;
+      submitScore(internal_score, nickname);
+      internal_score = 0;
     }
 }
 return {click:click, drawCorona:drawCorona};
