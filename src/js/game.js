@@ -1,7 +1,9 @@
 
 function loadStorage()
 {
-  document.getElementById("nickname").value = localStorage.getItem("nickname");
+  if (localStorage.getItem("nickname") != null) {
+    document.getElementById("nickname").value = localStorage.getItem("nickname");
+  }
 }
 var timerGameObj = (function(document){
 var internal_score = 0;
