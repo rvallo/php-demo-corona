@@ -9,10 +9,13 @@ class Controller
 
     public function __construct($model) {
         $this->model = $model;
-        $this->zkontrolujKrokVpred();
+        $this->checkParams();
     }
 
-    private function zkontrolujKrokVpred() {
+    private function checkParams() {
+        if(isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['login']) && isset($_POST['login'])) {
+            $this->model->loginAdmin($_POST['login'], $_POST['password']);
+        }
         if(isset($_GET['vpred'])) {
             $this->model->jdiVpred((int)$_GET['vpred']);
         }

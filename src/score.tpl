@@ -6,9 +6,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Score</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="css/uvod.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Score</h1>
+    <div id="box" align="center"></div>
+      <h1>Score</h1>
+
+<?php if (!isset($_SESSION['user'])) :?>
+    <form method="post" action="index.php">Login:
+        <input type="text" name="login" />
+        <br/>Heslo:
+        <input type="password" name="password" />
+        <input type="submit" />
+        <button type="button" id="cancel">Zrušit</button>
+    </form>
+    <a id="login" href="#">Přihlásit se</a><br/>
+<?php endif;?>
+
+<?php if (isset($_SESSION['user'])) :?>
+    <form method="post" action="index.php">Staré heslo:
+        <input type="password" name="oldpass" />
+        <br/>Nové heslo:
+        <input type="password" name="newpass" />
+        <input type="submit" />
+        <button type="button" id="cancel">Zrušit</button>
+    </form>
+    <a id="changePass" href="#">Změna hesla</a><br/>
+    <a id="logout" href="#">Odhlásit se</a><br/>
+<?php endif;?>
+
     <?php if(isset($data->cisloStranky)) :?>
         <p>Stránka č.: <?= $data->cisloStranky ?></p>
     <?php endif;?>
@@ -24,7 +51,6 @@
     <?php endforeach;?>
 
 <h2>High score</h2>
-<h4>TOP 20</h4>
 <table class="table table-bordered table-dark">
   <thead class="thead-dark">
     <tr>
@@ -40,4 +66,5 @@
     <?php endforeach;?>
     </tbody></table>
 </body>
+<script src="js/login.js"></script>
 </html>

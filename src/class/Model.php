@@ -8,6 +8,25 @@ class Model
 
 	}
 
+    public function runSQL($sqlcmd) {
+        require('config.php');
+        $result = NULL;
+        try {
+        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+        	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        	$sql = $conn->prepare($sqlcmd);
+        	$sql->execute();
+        	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
+
+            $result = $sql->FetchAll();
+        } catch (PDOException $e) {
+        	echo 'Chyba: Nelze se připojit k dtb!' . $e->getMessage();
+            $result = 0;
+        }
+        $conn = NULL;
+        return $result;
+    }
+
     public function jdiVpred($cisloStrany) {
 	    $this->krok = $cisloStrany;
 	    if($this->krok > $this->maxPocet) {
@@ -16,6 +35,21 @@ class Model
         if($this->krok < 1) {
             $this->krok = 1;
         }
+    }
+
+    public function loginAdmin($login, $password) {
+       $adminPass = $this->runSQL("SELECT password FROM admin WHERE username='". $login . "'");
+       $newhash = password_hash($password, PASSWORD_DEFAULT);
+       
+       if (password_verify($password, $adminPass[0]["password"])) {
+        echo "shito!";
+        $_SESSION['user'] = $login;
+        //header('Refresh: 2; URL = index.php');
+        } 
+        else {
+          echo "neplatne heslo!";
+        }
+
     }
 
     public function vratCisloStranky() {
@@ -28,7 +62,6 @@ class Model
 	        $stranky[] = (object) array(
 	            'url' => 'index.php?vpred='.$i,
                 'cislo' => $i
-                //'active' => ($i == $this->krok)
             );
         }
 	    return $stranky;
@@ -50,28 +83,9 @@ class Model
 	    return $score;
     }
 
-    public function runSQL($sqlcmd) {
-        require_once('config.php');
-        $result = NULL;
-        try {
-        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
-        	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        	$sql = $conn->prepare($sqlcmd);
-        	$sql->execute();
-        	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
-
-            $result = $sql->FetchAll();
-        } catch (PDOException $e) {
-        	echo 'Chyba: Nelze se připojit k dtb!' . $e->getMessage();
-            $result = 0;
-        }
-        $conn = NULL;
-        return $result;
-    }
-
     public function getHighScore() {
-        $test = $this->runSQL("SELECT score FROM score ORDER BY score DESC LIMIT 1");
-	    return (isset($test[0]["score"]) ? $test[0]["score"] : 0);
+        $highscore = $this->runSQL("SELECT score FROM score ORDER BY score DESC LIMIT 1");
+	    return (isset($highscore[0]["score"]) ? $highscore[0]["score"] : 0);
     }
 
 
