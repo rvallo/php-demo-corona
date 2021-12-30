@@ -57,6 +57,12 @@ class Model
         $this->msg = "Vlozeno do dtb.";
      }
 
+    public function logOut() {
+        session_unset();
+        session_destroy();
+	    $this->msg = "Odhlášení bylo úspěšné.";
+    }
+
     public function getMsg() {
 	    return $this->msg;
     }

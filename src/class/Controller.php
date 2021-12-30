@@ -17,8 +17,7 @@ class Controller
             $this->model->insertScore((int)$_POST['score'], $_POST['nickname']);
         }
         if (isset($_POST['logout']) && $_POST['logout'] == 'true') {
-            session_unset();
-            session_destroy();
+            $this->model->logOut();
         }
         if(isset($_POST['password']) && !empty($_POST['password']) && !empty($_POST['login']) && isset($_POST['login'])) {
             $this->model->loginAdmin($_POST['login'], $_POST['password']);
