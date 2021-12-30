@@ -33,12 +33,18 @@ class Model
         }
 	    return $stranky;
     }
-    
+
 
     public function dejDataProSablonu() {
+        $template = 'uvod.tpl';
+        if ($this->krok == 2) {
+            $template = 'game.tpl';
+        }
+
 	    return (object) array(
 	        'cisloStranky' => $this->krok,
-            'stranky' => $this->strankyOdkazovane()
+            'stranky' => $this->strankyOdkazovane(),
+            'template' => $template
         );
     }
 

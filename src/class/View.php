@@ -19,8 +19,7 @@ class View
 
     private function vypisStranku() {
         $data = $this->model->dejDataProSablonu();
-        //var_dump($data);
         //echo "Stránka č.: " . $this->model->vratCisloStranky();
-        include 'uvod.tpl';
+        include $data->template;
     }
 }

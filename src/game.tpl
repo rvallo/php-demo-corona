@@ -5,10 +5,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stránkování</title>
+    <title>Game is pain</title>
 </head>
 <body>
-    <h1>Stránkování MVC</h1>
+    <h1>Game</h1>
     <?php if(isset($data->cisloStranky)) :?>
         <p>Stránka č.: <?= $data->cisloStranky ?></p>
     <?php endif;?>
