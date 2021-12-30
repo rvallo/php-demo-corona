@@ -4,5 +4,7 @@
 [] styly
 [x] Odesilani score
 [] Opravit SQL injection
-[] Ukladani nicku do prohlizece
+[x] Ukladani nicku do prohlizece
 [] Deploy na krakena
+[] zmena Hesla
+[] odhlaseni zlobi

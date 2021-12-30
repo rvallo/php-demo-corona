@@ -55,6 +55,7 @@
     <?php endforeach;?>
 
 <h2>High score</h2>
+<?php if (!isset($_SESSION['user'])) :?>
 <table class="table table-bordered table-dark">
   <thead class="thead-dark">
     <tr>
@@ -63,12 +64,29 @@
       <th scope="col">Score</th>
     </tr>
   </thead>
-  <tbody>
-  
+  <tbody>  
   <?php foreach($data->score as $key=> $row_score) :?>
        <tr><th scope="row"><?= $row_score->rank ?></th><td><?= $row_score->nick ?></td><td><?= $row_score->score ?></td></tr>
     <?php endforeach;?>
     </tbody></table>
+    <?php endif;?>
+
+<?php if (isset($_SESSION['user'])) :?>
+<table class="table table-bordered table-dark">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Score</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>  
+  <?php foreach($data->score as $key=> $row_score) :?>
+       <tr><th scope="row"><?= $row_score->rank ?></th><td><?= $row_score->nick ?></td><td><?= $row_score->score ?></td><td><a href=index.php?delete=<?= $row_score->id ?>>Delete!</a></td></tr>
+    <?php endforeach;?>
+    </tbody></table>
+    <?php endif;?>
 </body>
 <script src="js/login.js"></script>
 </html>

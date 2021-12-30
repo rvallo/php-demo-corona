@@ -76,15 +76,20 @@ class Model
 	    return $stranky;
     }
 
+    public function deleteScore($id) {
+        echo $id;
+    }
+
     public function getScore() {
         $score = array();
-        $scoreSql = $this->runSQL("SELECT nickname,score FROM score ORDER BY score DESC");
+        $scoreSql = $this->runSQL("SELECT id,nickname,score FROM score ORDER BY score DESC");
         $rank = 1;
 	    foreach ($scoreSql as $row) {
             $score[] = (object) array(
 	            'rank' => $rank,
                 'nick' => $row["nickname"],
-                'score' => $row["score"]
+                'score' => $row["score"],
+                'id' => $row["id"]
             );
 		  $rank++;
 	    }
