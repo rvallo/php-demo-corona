@@ -10,7 +10,7 @@
 		<link href="css/main.css" rel="stylesheet">
 		<script src="js/game.js"></script>
 	</head>
-	<body class="text-center" >
+	<body class="text-center" onload="loadStorage()">
 		<h1>Chytni svojí koronu</h1>
 		<p><button id="back" onclick="location.href='index.php';" >Zpět na highscore.</button><?php if(isset($data->highscore)) :?> HIGHSCORE:<input type="text" class="myInput" id="highscore" name="highscore" value="<?= $data->highscore ?>" readonly><?php endif;?><br>
 		<button id="start_btn" class="rounded-50" onclick="timerGameObj.click()">Start game</button> SCORE:<input type="text" class="myInput" id="score" name="score" readonly> Zbývající sekundy:<input type="text" class="myInput" id="time" name="time" value="60" readonly> Přezdívka:<input type="text" required="true" class="myInput" id="nickname" name="nickname" value="player">

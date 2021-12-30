@@ -1,3 +1,8 @@
+
+function loadStorage()
+{
+  document.getElementById("nickname").value = localStorage.getItem("nickname");
+}
 var timerGameObj = (function(document){
 var internal_score = 0;
 var timerGame;
@@ -30,6 +35,8 @@ function start()
 {
   timerGame = setInterval(drawCorona, 800);
   document.getElementById("score").value = "0";
+  nick = document.getElementById("nickname").value;
+  localStorage.setItem("nickname", nick);
   //console.log("spoustim");
 }
 
