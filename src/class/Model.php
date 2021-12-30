@@ -77,7 +77,12 @@ class Model
     }
 
     public function deleteScore($id) {
-        echo $id;
+        require('config.php');
+        $conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = $conn->prepare("DELETE FROM `game`.`score` WHERE id = :id;");
+		$sql->bindParam(':id', $id, PDO::PARAM_INT );
+		$sql->execute();
     }
 
     public function getScore() {
