@@ -9,32 +9,14 @@ class Model
 
 	}
 
-    public function runSelectSQL($sqlcmd) {
+    public function selectScoreSQL($limit) {
         require('config.php');
         $result = NULL;
         try {
         	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
         	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        	$sql = $conn->prepare($sqlcmd);
-        	$sql->execute();
-        	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
-
-            $result = $sql->FetchAll();
-        } catch (PDOException $e) {
-        	echo 'Chyba1: Nelze se připojit k dtb!' . $e->getMessage();
-            $result = 0;
-        }
-        $conn = NULL;
-        return $result;
-    }
-
-    public function runSQL($sqlcmd) {
-        require('config.php');
-        $result = NULL;
-        try {
-        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
-        	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        	$sql = $conn->prepare($sqlcmd);
+        	$sql = $conn->prepare("SELECT id,nickname,score FROM score ORDER BY score DESC LIMIT :limit;");
+            $sql->bindParam(':limit', $limit, PDO::PARAM_INT );
         	$sql->execute();
         	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -58,14 +40,12 @@ class Model
         	$sql->execute();
         	$score = $sql->setFetchMode(PDO::FETCH_ASSOC);
             $result = $sql->FetchAll();
-            //$sql->close();
         } catch (PDOException $e) {
         	echo 'Chybasp: Nelze se připojit k dtb!' . $e->getMessage();
             $conn = NULL;
             return $result = 0;
         }
         $conn = NULL;
-        //return $result[0]["password"];
         return (isset($result[0]["password"]) ? $result[0]["password"] : 0);
     }
 
@@ -199,7 +179,7 @@ class Model
 
     public function getScore() {
         $score = array();
-        $scoreSql = $this->runSQL("SELECT id,nickname,score FROM score ORDER BY score DESC");
+        $scoreSql = $this->selectScoreSQL(100);
         $rank = 1;
 	    foreach ($scoreSql as $row) {
             $score[] = (object) array(
@@ -215,7 +195,7 @@ class Model
     }
 
     public function getHighScore() {
-        $highscore = $this->runSQL("SELECT score FROM score ORDER BY score DESC LIMIT 1");
+        $highscore = $this->selectScoreSQL(1);
 	    return (isset($highscore[0]["score"]) ? $highscore[0]["score"] : 0);
     }
 
