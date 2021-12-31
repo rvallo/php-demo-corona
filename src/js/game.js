@@ -18,6 +18,7 @@ function click()
     btn.innerHTML = "Stop pain!!!";
     setResult("result","Jdeme na to ;)","color_blue");
     setValueElement("time", 60);
+    internal_score = 0;
     start(timerGame);
   }
   else
