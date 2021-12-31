@@ -22,7 +22,7 @@
            <dt><a class="nav-link" href="<?= $str->url?>">O projektu</a></dt>
            <dd>Info o projektu</dd>
         <?php else :?>
-            <dt><a class="nav-link" href="<?= $str->url?>">Hrej <?= $str->cislo?></a></dt>
+            <dt><a class="nav-link" href="<?= $str->url?>">Hrej</a></dt>
             <dd>Hra "chyť si svoji koronu"</dd>
         <?php endif;?>
     <?php endforeach;?>
