@@ -2,25 +2,30 @@
 <?php //var_dump($data->stranky);?>
 </pre>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Stránkování</title>
+    <title>O projektu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="css/main.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Stránkování MVC</h1>
-    <?php if(isset($data->cisloStranky)) :?>
-        <p>Stránka č.: <?= $data->cisloStranky ?></p>
-    <?php endif;?>
+<body class="text-center">
+    <h1>Hra o chytání korony</h1>
+    <p>Cílem hry je chytit co nejvíce koronáče.</p>
 
+    <dl>
     <?php foreach($data->stranky as $ind => $str) :?>
         <?php if($ind == 0) :?>
-            <a href="<?= $str->url?>">Úvod</a><br>
+           <dt><a class="nav-link" href="<?= $str->url?>">Score</a></dt>
+           <dd>Po přihlášení lze mazat score</dd>
         <?php elseif($ind == count($data->stranky)-1) :?>
-            <br><a href="<?= $str->url?>">Poslední</a>
+           <dt><a class="nav-link" href="<?= $str->url?>">O projektu</a></dt>
+           <dd>Info o projektu</dd>
         <?php else :?>
-            <a href="<?= $str->url?>">Strana <?= $str->cislo?></a> |
+            <dt><a class="nav-link" href="<?= $str->url?>">Hrej <?= $str->cislo?></a></dt>
+            <dd>Hra "chyť si svoji koronu"</dd>
         <?php endif;?>
     <?php endforeach;?>
+    </dl>
 </body>
 </html>

@@ -7,9 +7,10 @@
     <meta charset="UTF-8">
     <title>Score</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="css/uvod.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="css/main.css" rel="stylesheet">
 </head>
-<body>
+<body class="text-center">
     <div id="box" align="center"></div>
 
 <?php if (isset($data->msg) && !empty($data->msg)) :?>
@@ -18,41 +19,44 @@
       <h1>Score</h1>
 
 <?php if (!isset($_SESSION['user'])) :?>
-    <form method="post" action="index.php">Login:
+    <form id="hiddenForm"  method="post" action="index.php">Login:
         <input type="text" name="login" />
         <br/>Heslo:
         <input type="password" name="password" />
-        <input type="submit" />
+        <br>
+        <button type="submit" >Přihlásit se</button>
         <button type="button" id="cancel">Zrušit</button>
     </form>
     <a id="login" href="#">Přihlásit se</a><br/>
 <?php endif;?>
 
 <?php if (isset($_SESSION['user'])) :?>
-    <form method="post" action="index.php">Staré heslo:
+    <form class="text-center" id="hiddenForm" method="post" action="index.php">Staré heslo:
         <input type="password" name="oldpass" />
         <br/>Nové heslo:
         <input type="password" name="newpass" />
-        <input type="submit" />
+        <br>
+        <button type="submit" >Změnit heslo</button>
         <button type="button" id="cancel">Zrušit</button>
     </form>
     <a id="changePass" href="#">Změna hesla</a><br/>
     <a id="logout" href="#">Odhlásit se</a><br/>
 <?php endif;?>
 
-    <?php if(isset($data->cisloStranky)) :?>
-        <p>Stránka č.: <?= $data->cisloStranky ?></p>
-    <?php endif;?>
-
+    <dl>
     <?php foreach($data->stranky as $ind => $str) :?>
         <?php if($ind == 0) :?>
-            <a href="<?= $str->url?>">Úvod</a><br>
+           <dt><a class="nav-link" href="<?= $str->url?>">Score</a></dt>
+           <dd>Po přihlášení lze mazat score</dd>
         <?php elseif($ind == count($data->stranky)-1) :?>
-            <br><a href="<?= $str->url?>">Poslední</a>
+           <dt><a class="nav-link" href="<?= $str->url?>">O projektu</a></dt>
+           <dd>Info o projektu</dd>
         <?php else :?>
-            <a href="<?= $str->url?>">Strana <?= $str->cislo?></a> |
+            <dt><a class="nav-link" href="<?= $str->url?>">Hrej <?= $str->cislo?></a></dt>
+            <dd>Hra "chyť si svoji koronu"</dd>
         <?php endif;?>
     <?php endforeach;?>
+    </dl>
 
 <h2>High score</h2>
 <?php if (!isset($_SESSION['user'])) :?>

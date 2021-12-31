@@ -3,7 +3,7 @@ class Model
 {
     private $krok = 1;
     private $msg = "";
-    private $maxPocet = 5;
+    private $maxPocet = 3;
 
 	public function __construct(){
 
@@ -163,11 +163,12 @@ class Model
     }
 
     public function deleteScore($id) {
-        $conn = new PDO($GLOBALS['DB_CON'], SQL_USERNAME, SQL_PASSWORD);
-		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = $conn->prepare("DELETE FROM `game`.`score` WHERE id = :id;");
-		$sql->bindParam(':id', $id, PDO::PARAM_INT );
-		$sql->execute();
+      $conn = new PDO($GLOBALS['DB_CON'], SQL_USERNAME, SQL_PASSWORD);
+      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+      $sql = $conn->prepare("DELETE FROM `game`.`score` WHERE id = :id;");
+      $sql->bindParam(':id', $id, PDO::PARAM_INT );
+      $sql->execute();
+      $this->msg = "Smazáni proběhlo úspěšně.";
     }
 
     public function getScore() {
