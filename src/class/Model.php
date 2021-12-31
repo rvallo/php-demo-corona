@@ -90,6 +90,27 @@ class Model
         return $result;
     }
 
+    public function insertScoreSQL($nickname,$score) {
+        require('config.php');
+        $result = false;
+        try {
+            require('config.php');
+            $conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = $conn->prepare("INSERT INTO `game`.`score` (nickname, score) VALUES (:nick,:score);");
+            $sql->bindParam(':nick', $nickname, PDO::PARAM_STR, 255 );
+            $sql->bindParam(':score', $score, PDO::PARAM_INT );
+            $sql->execute();
+            $result = true;
+        } catch (PDOException $e) {
+        	echo 'Chybasp: Nelze se připojit k dtb!' . $e->getMessage();
+            $conn = NULL;
+            return $result;
+        }
+        $conn = NULL;
+        return $result;
+    }
+
     public function jdiVpred($cisloStrany) {
 	    $this->krok = $cisloStrany;
 	    if($this->krok > $this->maxPocet) {
@@ -122,8 +143,7 @@ class Model
     }
 
     public function insertScore($score, $nickname) {
-        $insert = $this->runSQL("INSERT INTO `game`.`score` (nickname, score) VALUES ('". $nickname ."',". $score .");");
-        $this->msg = "Vlozeno do dtb.";
+        $this->msg = ($this->insertScoreSQL($nickname, $score) ? "Vlozeno do dtb." : "Chyba ukladani.");
      }
 
     public function logOut() {

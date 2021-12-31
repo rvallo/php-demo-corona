@@ -6,5 +6,5 @@
 [] Opravit SQL injection
 [x] Ukladani nicku do prohlizece
 [] Deploy na krakena
-[] zmena Hesla
+[x] zmena Hesla
 [x] odhlaseni zlobi
