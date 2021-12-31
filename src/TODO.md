@@ -5,6 +5,6 @@
 [x] Odesilani score
 [] Opravit SQL injection
 [x] Ukladani nicku do prohlizece
-[] Deploy na krakena
+[] Deploy
 [x] zmena Hesla
 [x] odhlaseni zlobi

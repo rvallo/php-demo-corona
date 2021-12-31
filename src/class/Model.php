@@ -10,10 +10,9 @@ class Model
 	}
 
     public function selectScoreSQL($limit) {
-        require('config.php');
         $result = NULL;
         try {
-        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+        	$conn = new PDO($GLOBALS['DB_CON'], SQL_USERNAME, SQL_PASSWORD);
         	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         	$sql = $conn->prepare("SELECT id,nickname,score FROM score ORDER BY score DESC LIMIT :limit;");
             $sql->bindParam(':limit', $limit, PDO::PARAM_INT );
@@ -30,10 +29,9 @@ class Model
     }
 
     public function selectPass($login) {
-        require('config.php');
         $result = NULL;
         try {
-        	$conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+        	$conn = new PDO($GLOBALS['DB_CON'], SQL_USERNAME, SQL_PASSWORD);
         	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         	$sql = $conn->prepare("SELECT password FROM admin WHERE username=:username;");
             $sql->bindParam(':username', $login, PDO::PARAM_STR, 45 );
@@ -50,11 +48,9 @@ class Model
     }
 
     public function updatePass($login,$newhash) {
-        require('config.php');
         $result = false;
         try {
-            require('config.php');
-            $conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+            $conn = new PDO($GLOBALS['DB_CON'], SQL_USERNAME, SQL_PASSWORD);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = $conn->prepare("UPDATE admin SET password=:newhash WHERE username=:user;");
             $sql->bindParam(':newhash', $newhash, PDO::PARAM_STR, 255 );
@@ -71,11 +67,9 @@ class Model
     }
 
     public function insertScoreSQL($nickname,$score) {
-        require('config.php');
         $result = false;
         try {
-            require('config.php');
-            $conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+            $conn = new PDO($GLOBALS['DB_CON'], SQL_USERNAME, SQL_PASSWORD);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = $conn->prepare("INSERT INTO `game`.`score` (nickname, score) VALUES (:nick,:score);");
             $sql->bindParam(':nick', $nickname, PDO::PARAM_STR, 255 );
@@ -169,8 +163,7 @@ class Model
     }
 
     public function deleteScore($id) {
-        require('config.php');
-        $conn = new PDO("mysql:host=$servername;dbname=$database",$username,$password);
+        $conn = new PDO($GLOBALS['DB_CON'], SQL_USERNAME, SQL_PASSWORD);
 		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$sql = $conn->prepare("DELETE FROM `game`.`score` WHERE id = :id;");
 		$sql->bindParam(':id', $id, PDO::PARAM_INT );

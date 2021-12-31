@@ -9,3 +9,9 @@ function automaticky_nacitac_trid($class) {
 }
 
 spl_autoload_register('automaticky_nacitac_trid');
+
+define('SQL_HOST', getenv('DB_HOST'));
+define('SQL_DBNAME', getenv('DB_NAME'));
+define('SQL_USERNAME', getenv('DB_USER'));
+define('SQL_PASSWORD', getenv('DB_PASSWORD'));
+$GLOBALS['DB_CON'] = 'mysql:dbname=' . SQL_DBNAME . ';host=' . SQL_HOST . '';
